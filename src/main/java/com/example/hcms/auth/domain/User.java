@@ -6,8 +6,9 @@ import java.util.HashSet;
 import java.util.Set;
 
 /**
- * User entity representing a system user (employee, manager, HR, admin).
- * Stores authentication credentials and basic user information.
+ * User entity representing a system user for authentication and authorization.
+ * Employee/member profile information is stored separately in the Member entity.
+ * This entity handles: login credentials, authentication tokens, and role assignments.
  */
 @Entity
 @Table(name = "user", indexes = {
@@ -28,60 +29,6 @@ public class User {
 
     @Column(nullable = false, length = 255)
     private String passwordHash;
-
-    @Column(length = 100)
-    private String firstName;
-
-    @Column(length = 100)
-    private String lastName;
-
-    @Column(length = 20)
-    private String phoneNumber;
-
-    @Column(name = "department_id")
-    private Long departmentId;
-
-    @Column(length = 100)
-    private String jobTitle;
-
-    @Column(length = 100)
-    private String alias;
-
-    @Column(length = 50)
-    private String deskId;
-
-    @Column(length = 20)
-    private String phoneExtension;
-
-    @Column(length = 50)
-    private String employeeNumber;
-
-    @Column(name = "user_identifier", length = 50)
-    private String userId; // System/External user ID
-
-    @Column(length = 20)
-    private String gender;
-
-    @Column(length = 50)
-    private String workforceType;
-
-    @Column(length = 50)
-    private String dateOfEmployment;
-
-    @Column(length = 100)
-    private String country;
-
-    @Column(length = 100)
-    private String city;
-
-    @Column(length = 100)
-    private String directManager;
-
-    @Column(length = 100)
-    private String dottedLineManager;
-
-    @Column(name = "attendance_group_id")
-    private Long attendanceGroupId;
 
     @Column(nullable = false)
     @Enumerated(EnumType.STRING)
@@ -151,150 +98,6 @@ public class User {
 
     public void setPasswordHash(String passwordHash) {
         this.passwordHash = passwordHash;
-    }
-
-    public String getFirstName() {
-        return firstName;
-    }
-
-    public void setFirstName(String firstName) {
-        this.firstName = firstName;
-    }
-
-    public String getLastName() {
-        return lastName;
-    }
-
-    public void setLastName(String lastName) {
-        this.lastName = lastName;
-    }
-
-    public String getPhoneNumber() {
-        return phoneNumber;
-    }
-
-    public void setPhoneNumber(String phoneNumber) {
-        this.phoneNumber = phoneNumber;
-    }
-
-    public Long getDepartmentId() {
-        return departmentId;
-    }
-
-    public void setDepartmentId(Long departmentId) {
-        this.departmentId = departmentId;
-    }
-
-    public String getJobTitle() {
-        return jobTitle;
-    }
-
-    public void setJobTitle(String jobTitle) {
-        this.jobTitle = jobTitle;
-    }
-
-    public String getAlias() {
-        return alias;
-    }
-
-    public void setAlias(String alias) {
-        this.alias = alias;
-    }
-
-    public String getDeskId() {
-        return deskId;
-    }
-
-    public void setDeskId(String deskId) {
-        this.deskId = deskId;
-    }
-
-    public String getPhoneExtension() {
-        return phoneExtension;
-    }
-
-    public void setPhoneExtension(String phoneExtension) {
-        this.phoneExtension = phoneExtension;
-    }
-
-    public String getEmployeeNumber() {
-        return employeeNumber;
-    }
-
-    public void setEmployeeNumber(String employeeNumber) {
-        this.employeeNumber = employeeNumber;
-    }
-
-    public String getUserId() {
-        return userId;
-    }
-
-    public void setUserId(String userId) {
-        this.userId = userId;
-    }
-
-    public String getGender() {
-        return gender;
-    }
-
-    public void setGender(String gender) {
-        this.gender = gender;
-    }
-
-    public String getWorkforceType() {
-        return workforceType;
-    }
-
-    public void setWorkforceType(String workforceType) {
-        this.workforceType = workforceType;
-    }
-
-    public String getDateOfEmployment() {
-        return dateOfEmployment;
-    }
-
-    public void setDateOfEmployment(String dateOfEmployment) {
-        this.dateOfEmployment = dateOfEmployment;
-    }
-
-    public String getCountry() {
-        return country;
-    }
-
-    public void setCountry(String country) {
-        this.country = country;
-    }
-
-    public String getCity() {
-        return city;
-    }
-
-    public void setCity(String city) {
-        this.city = city;
-    }
-
-    public String getDirectManager() {
-        return directManager;
-    }
-
-    public void setDirectManager(String directManager) {
-        this.directManager = directManager;
-    }
-
-    public String getDottedLineManager() {
-        return dottedLineManager;
-    }
-
-    public void setDottedLineManager(String dottedLineManager) {
-        this.dottedLineManager = dottedLineManager;
-    }
-
-    public Long getAttendanceGroupId() {
-        return attendanceGroupId;
-    }
-
-    public void setAttendanceGroupId(Long attendanceGroupId) {
-        this.attendanceGroupId = attendanceGroupId;
     }
 
     public UserStatus getStatus() {

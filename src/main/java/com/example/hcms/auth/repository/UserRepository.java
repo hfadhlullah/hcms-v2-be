@@ -7,7 +7,8 @@ import org.springframework.stereotype.Repository;
 import java.util.Optional;
 
 /**
- * Repository for User entity operations
+ * Repository for User entity operations (authentication only).
+ * Member/employee profile queries should use MemberRepository.
  */
 @Repository
 public interface UserRepository extends JpaRepository<User, Long> {
@@ -34,12 +35,4 @@ public interface UserRepository extends JpaRepository<User, Long> {
      * @return true if user exists
      */
     boolean existsByEmail(String email);
-
-    /**
-     * Count users in an attendance group
-     *
-     * @param attendanceGroupId the attendance group ID
-     * @return number of users
-     */
-    long countByAttendanceGroupId(Long attendanceGroupId);
 }

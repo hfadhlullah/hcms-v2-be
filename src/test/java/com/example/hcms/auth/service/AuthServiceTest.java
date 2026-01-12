@@ -54,11 +54,9 @@ public class AuthServiceTest {
 
     @BeforeEach
     public void setUp() {
-        // Setup test user
+        // Setup test user (User now only handles authentication, not member profile)
         testUser = new User("alice@company.com", "alice", "$2a$10$hashedpassword");
         testUser.setId(1L);
-        testUser.setFirstName("Alice");
-        testUser.setLastName("Smith");
         testUser.setStatus(User.UserStatus.ACTIVE);
 
         // Add role

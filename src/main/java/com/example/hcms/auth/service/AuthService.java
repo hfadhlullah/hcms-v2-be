@@ -90,12 +90,12 @@ public class AuthService {
         String token = jwtProvider.generateToken(user.getId(), roles, rememberMe);
         Instant expiresAt = jwtProvider.getTokenExpirationTime(rememberMe);
 
-        // Create response
+        // Create response (profile info is in Member entity, not User)
         UserResponse userResponse = new UserResponse(
                 user.getId(),
                 user.getEmail(),
-                user.getFirstName(),
-                user.getLastName(),
+                null, // firstName is stored in Member entity
+                null, // lastName is stored in Member entity
                 roles
         );
 

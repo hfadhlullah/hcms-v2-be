@@ -16,7 +16,8 @@ import java.util.Set;
 import java.util.UUID;
 
 /**
- * Service for managing users/members
+ * Service for managing users (authentication and authorization only).
+ * Member/employee profile management has been moved to MemberService.
  */
 @Service
 @Transactional
@@ -31,7 +32,8 @@ public class UserService {
     }
 
     /**
-     * Create a new user/member
+     * Create a new user account for authentication
+     * Note: Use MemberService to create the associated member profile
      *
      * @param request the create user request
      * @return the created user response
@@ -44,39 +46,20 @@ public class UserService {
         String tempPassword = UUID.randomUUID().toString().substring(0, 8);
         String passwordHash = passwordEncoder.encode(tempPassword);
 
-        // Create user entity
+        // Create user entity with minimal fields
         User user = new User();
         user.setEmail(request.getEmail() != null ? request.getEmail() : username + "@temp.local");
         user.setUsername(username);
         user.setPasswordHash(passwordHash);
-        user.setFirstName(request.getFirstName() != null ? request.getFirstName() : request.getName());
-        user.setLastName(request.getLastName());
         user.setStatus(User.UserStatus.INACTIVE); // INACTIVE until they accept invitation
-
-        // Detailed info
-        user.setPhoneNumber(request.getPhoneNumber());
-        user.setDepartmentId(request.getDepartmentId());
-        user.setAlias(request.getAlias());
-        user.setDeskId(request.getDeskId());
-        user.setPhoneExtension(request.getPhoneExtension());
-        user.setEmployeeNumber(request.getEmployeeNumber());
-        user.setUserId(request.getUserId());
-        user.setGender(request.getGender());
-        user.setWorkforceType(request.getWorkforceType());
-        user.setDateOfEmployment(request.getDateOfEmployment());
-        user.setCountry(request.getCountry());
-        user.setCity(request.getCity());
-        user.setDirectManager(request.getDirectManager());
-        user.setDottedLineManager(request.getDottedLineManager());
-        user.setJobTitle(request.getJobTitle());
 
         User savedUser = userRepository.save(user);
 
         return new UserResponse(
                 savedUser.getId(),
                 savedUser.getEmail(),
-                savedUser.getFirstName(),
-                savedUser.getLastName(),
+                null, // firstName stored in Member, not User
+                null, // lastName stored in Member, not User
                 Set.of("EMPLOYEE") // Default role
         );
     }
@@ -93,8 +76,8 @@ public class UserService {
                 .map((@NonNull User user) -> new UserResponse(
                         user.getId(),
                         user.getEmail(),
-                        user.getFirstName(),
-                        user.getLastName(),
+                        null, // firstName stored in Member, not User
+                        null, // lastName stored in Member, not User
                         user.getRoles().stream()
                                 .map(ur -> ur.getRole().name())
                                 .collect(java.util.stream.Collectors.toSet())));
@@ -143,7 +126,8 @@ public class UserService {
     }
 
     /**
-     * Update an existing user
+     * Update an existing user's authentication credentials
+     * Note: Use MemberService to update member profile information
      *
      * @param id      user ID
      * @param request update request
@@ -154,60 +138,24 @@ public class UserService {
                 userRepository.findById(id)
                         .orElseThrow(() -> new RuntimeException("User not found")));
 
-        if (request.getName() != null)
-            user.setFirstName(request.getName()); // Basic mapping
-        if (request.getFirstName() != null)
-            user.setFirstName(request.getFirstName());
-        if (request.getLastName() != null)
-            user.setLastName(request.getLastName());
-        if (request.getEmail() != null)
-            user.setEmail(request.getEmail()); // TODO: Check for duplicates?
-
-        if (request.getPhoneNumber() != null)
-            user.setPhoneNumber(request.getPhoneNumber());
-        if (request.getDepartmentId() != null)
-            user.setDepartmentId(request.getDepartmentId());
-        if (request.getAlias() != null)
-            user.setAlias(request.getAlias());
-        if (request.getDeskId() != null)
-            user.setDeskId(request.getDeskId());
-        if (request.getPhoneExtension() != null)
-            user.setPhoneExtension(request.getPhoneExtension());
-        if (request.getEmployeeNumber() != null)
-            user.setEmployeeNumber(request.getEmployeeNumber());
-        if (request.getUserId() != null)
-            user.setUserId(request.getUserId());
-        if (request.getGender() != null)
-            user.setGender(request.getGender());
-        if (request.getWorkforceType() != null)
-            user.setWorkforceType(request.getWorkforceType());
-        if (request.getDateOfEmployment() != null)
-            user.setDateOfEmployment(request.getDateOfEmployment());
-        if (request.getCountry() != null)
-            user.setCountry(request.getCountry());
-        if (request.getCity() != null)
-            user.setCity(request.getCity());
-        if (request.getDirectManager() != null)
-            user.setDirectManager(request.getDirectManager());
-        if (request.getDottedLineManager() != null)
-            user.setDottedLineManager(request.getDottedLineManager());
-        if (request.getJobTitle() != null)
-            user.setJobTitle(request.getJobTitle());
+        if (request.getEmail() != null) {
+            user.setEmail(request.getEmail());
+        }
 
         User savedUser = userRepository.save(user);
 
         return new UserResponse(
                 savedUser.getId(),
                 savedUser.getEmail(),
-                savedUser.getFirstName(),
-                savedUser.getLastName(),
+                null, // firstName stored in Member, not User
+                null, // lastName stored in Member, not User
                 savedUser.getRoles().stream()
                         .map(ur -> ur.getRole().name())
                         .collect(java.util.stream.Collectors.toSet()));
     }
 
     /**
-     * Delete a user
+     * Delete a user account
      *
      * @param id user ID
      */

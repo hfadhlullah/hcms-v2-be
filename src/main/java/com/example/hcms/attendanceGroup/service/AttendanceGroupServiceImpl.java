@@ -3,7 +3,7 @@ package com.example.hcms.attendanceGroup.service;
 import com.example.hcms.attendanceGroup.domain.*;
 import com.example.hcms.attendanceGroup.dto.*;
 import com.example.hcms.attendanceGroup.repository.AttendanceGroupRepository;
-import com.example.hcms.auth.repository.UserRepository;
+import com.example.hcms.member.repository.MemberRepository;
 import com.example.hcms.shift.domain.Shift;
 import com.example.hcms.shift.repository.ShiftRepository;
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -30,17 +30,17 @@ public class AttendanceGroupServiceImpl implements AttendanceGroupService {
 
     private final AttendanceGroupRepository repository;
     private final ShiftRepository shiftRepository;
-    private final UserRepository userRepository;
+    private final MemberRepository memberRepository;
     private final ObjectMapper objectMapper;
 
     public AttendanceGroupServiceImpl(
             AttendanceGroupRepository repository,
             ShiftRepository shiftRepository,
-            UserRepository userRepository,
+            MemberRepository memberRepository,
             ObjectMapper objectMapper) {
         this.repository = repository;
         this.shiftRepository = shiftRepository;
-        this.userRepository = userRepository;
+        this.memberRepository = memberRepository;
         this.objectMapper = objectMapper;
     }
 
@@ -196,7 +196,7 @@ public class AttendanceGroupServiceImpl implements AttendanceGroupService {
         response.setStatus(group.getStatus());
         response.setCreatedAt(group.getCreatedAt());
         response.setUpdatedAt(group.getUpdatedAt());
-        response.setMemberCount((int) userRepository.countByAttendanceGroupId(group.getId()));
+        response.setMemberCount((int) memberRepository.countByAttendanceGroupId(group.getId()));
 
         return response;
     }
