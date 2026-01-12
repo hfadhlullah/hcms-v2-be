@@ -115,7 +115,7 @@ public class JwtProvider {
     public Set<String> getRolesFromToken(String token) {
         Claims claims = validateTokenAndGetClaims(token);
         Object rolesObj = claims.get(ROLES_CLAIM);
-        
+
         if (rolesObj instanceof Collection<?>) {
             return ((Collection<?>) rolesObj).stream()
                     .map(Object::toString)

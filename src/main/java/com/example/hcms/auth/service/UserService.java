@@ -31,7 +31,7 @@ public class UserService {
 
     /**
      * Create a new user/member
-     * 
+     *
      * @param request the create user request
      * @return the created user response
      */
@@ -82,7 +82,7 @@ public class UserService {
 
     /**
      * Get all users with pagination
-     * 
+     *
      * @param pageable pagination info
      * @return page of user responses
      */
@@ -117,7 +117,7 @@ public class UserService {
 
     /**
      * Reset a user's password
-     * 
+     *
      * @param userId   the user ID
      * @param password the new password, or null to generate by system
      * @return the generated password if generateBySystem is true, otherwise null
@@ -143,7 +143,7 @@ public class UserService {
 
     /**
      * Update an existing user
-     * 
+     *
      * @param id      user ID
      * @param request update request
      * @return updated user response
@@ -206,7 +206,7 @@ public class UserService {
 
     /**
      * Delete a user
-     * 
+     *
      * @param id user ID
      */
     public void deleteUser(Long id) {

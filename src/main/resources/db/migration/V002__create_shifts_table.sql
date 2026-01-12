@@ -20,7 +20,7 @@ CREATE TABLE shifts (
     updated_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
     created_by BIGINT,
     updated_by BIGINT,
-    
+
     CONSTRAINT fk_shift_created_by FOREIGN KEY (created_by) REFERENCES user(id) ON DELETE SET NULL,
     CONSTRAINT fk_shift_updated_by FOREIGN KEY (updated_by) REFERENCES user(id) ON DELETE SET NULL,
     CONSTRAINT chk_grace_period_in CHECK (grace_period_in_minutes >= 0 AND grace_period_in_minutes <= 120),

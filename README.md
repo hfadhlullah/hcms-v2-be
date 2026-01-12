@@ -13,7 +13,7 @@ REST API backend for the HCMS Time & Attendance System.
 | MariaDB/MySQL | 10.x+ / 8.x |
 
 ### 1. Database Setup
-   
+
 #### Option A: Docker (Recommended)
 This requires `docker-compose.yml` which is present in the root directory.
 
@@ -45,7 +45,7 @@ Server starts at: **http://localhost:8080**
    ```bash
    # Development
    mvn spring-boot:run
-   
+
    # Or build and run JAR
    mvn clean package -DskipTests
    java -jar target/difan-hcms-0.1.0-SNAPSHOT.jar
@@ -172,7 +172,7 @@ spring:
     url: ${DB_URL:jdbc:mariadb://localhost:3306/hcms}
     username: ${DB_USERNAME:root}
     password: ${DB_PASSWORD:}
-  
+
   jpa:
     hibernate:
       ddl-auto: validate

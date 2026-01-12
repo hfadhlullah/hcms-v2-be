@@ -36,7 +36,7 @@ public class UserController {
 
         /**
          * Create a new user/member
-         * 
+         *
          * @param request the create user request
          * @return the created user
          */
@@ -54,7 +54,7 @@ public class UserController {
 
         /**
          * Get all users with pagination
-         * 
+         *
          * @param pageable pagination parameters
          * @return page of users
          */
@@ -70,7 +70,7 @@ public class UserController {
 
         /**
          * Reset a user's password
-         * 
+         *
          * @param id      the user ID
          * @param request the reset password request
          * @return success message with generated password if applicable
@@ -94,7 +94,7 @@ public class UserController {
 
         /**
          * Update an existing user
-         * 
+         *
          * @param id      user ID
          * @param request update request
          * @return updated user
@@ -114,7 +114,7 @@ public class UserController {
 
         /**
          * Delete a user
-         * 
+         *
          * @param id user ID
          * @return no content
          */

@@ -6,4 +6,3 @@ package com.example.hcms.auth.exception;
 // - UserNotFoundException.java
 // - RateLimitExceededException.java
 // - TokenException.java
-

@@ -16,7 +16,7 @@ ALTER TABLE shifts ADD COLUMN IF NOT EXISTS is_next_day_end BOOLEAN DEFAULT FALS
 ALTER TABLE shifts ADD COLUMN IF NOT EXISTS clock_in_early_minutes INTEGER DEFAULT 60 NOT NULL;
 ALTER TABLE shifts ADD COLUMN IF NOT EXISTS half_day_late_threshold_minutes INTEGER DEFAULT 30 NOT NULL;
 
--- Clock-Out Rules  
+-- Clock-Out Rules
 ALTER TABLE shifts ADD COLUMN IF NOT EXISTS clock_out_late_minutes INTEGER DEFAULT 480 NOT NULL;
 ALTER TABLE shifts ADD COLUMN IF NOT EXISTS early_out_threshold_minutes INTEGER DEFAULT 0 NOT NULL;
 ALTER TABLE shifts ADD COLUMN IF NOT EXISTS half_day_early_threshold_minutes INTEGER DEFAULT 30 NOT NULL;

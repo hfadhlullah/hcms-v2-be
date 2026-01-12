@@ -168,7 +168,7 @@ Built in 1.64s
 ### Applied Migrations
 1. **V001__init_auth_user_tables.sql** - ✅ Successful
    - Created user, user_role, login_audit tables
-   
+
 2. **V002__create_shifts_table.sql** - ✅ Successful
    - Created shifts table with full schema
    - All constraints and indexes
@@ -189,12 +189,12 @@ spring:
     username: root
     password: root
     driver-class-name: org.mariadb.jdbc.Driver
-  
+
   jpa:
     hibernate:
       ddl-auto: validate
     database-platform: org.hibernate.dialect.MariaDB103Dialect
-  
+
   flyway:
     baselineOnMigrate: true
     validateOnMigrate: false
