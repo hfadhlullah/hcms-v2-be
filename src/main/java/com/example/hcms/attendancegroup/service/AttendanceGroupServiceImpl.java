@@ -6,7 +6,6 @@ import com.example.hcms.attendancegroup.repository.AttendanceGroupRepository;
 import com.example.hcms.shift.domain.Shift;
 import com.example.hcms.shift.repository.ShiftRepository;
 import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -67,6 +66,8 @@ public class AttendanceGroupServiceImpl implements AttendanceGroupService {
     public AttendanceGroupResponse createGroup(CreateAttendanceGroupRequest request, Long userId) {
         logger.info("Creating attendance group: {} by user: {}", request.getName(), userId);
 
+        Long defaultShiftId = request.getDefaultShiftId();
+
         // Check for duplicate name
         if (repository.existsByNameIgnoreCase(request.getName())) {
             throw new RuntimeException("Attendance group with name '" + request.getName() + "' already exists");
@@ -81,9 +82,9 @@ public class AttendanceGroupServiceImpl implements AttendanceGroupService {
         }
 
         // Set default shift if specified
-        if (request.getDefaultShiftId() != null) {
-            Shift shift = shiftRepository.findById(request.getDefaultShiftId())
-                    .orElseThrow(() -> new RuntimeException("Shift not found: " + request.getDefaultShiftId()));
+        if (defaultShiftId != null) {
+            Shift shift = shiftRepository.findById(defaultShiftId)
+                    .orElseThrow(() -> new RuntimeException("Shift not found: " + defaultShiftId));
             group.setDefaultShift(shift);
         }
 
@@ -99,6 +100,8 @@ public class AttendanceGroupServiceImpl implements AttendanceGroupService {
 
         AttendanceGroup group = getGroupById(id);
 
+        Long defaultShiftId = request.getDefaultShiftId();
+
         // Check for duplicate name if changed
         if (!group.getName().equalsIgnoreCase(request.getName())
                 && repository.existsByNameIgnoreCaseAndIdNot(request.getName(), id)) {
@@ -108,9 +111,9 @@ public class AttendanceGroupServiceImpl implements AttendanceGroupService {
         mapRequestToEntity(request, group);
 
         // Update default shift if specified
-        if (request.getDefaultShiftId() != null) {
-            Shift shift = shiftRepository.findById(request.getDefaultShiftId())
-                    .orElseThrow(() -> new RuntimeException("Shift not found: " + request.getDefaultShiftId()));
+        if (defaultShiftId != null) {
+            Shift shift = shiftRepository.findById(defaultShiftId)
+                    .orElseThrow(() -> new RuntimeException("Shift not found: " + defaultShiftId));
             group.setDefaultShift(shift);
         } else {
             group.setDefaultShift(null);
@@ -288,14 +291,17 @@ public class AttendanceGroupServiceImpl implements AttendanceGroupService {
         }
     }
 
-    @SuppressWarnings("unchecked")
     private <T> List<T> parseJsonList(String json, Class<T> elementType) {
         if (json == null || json.isEmpty()) {
             return Collections.emptyList();
         }
+
         try {
-            return objectMapper.readValue(json, new TypeReference<List<T>>() {
-            });
+            var type = objectMapper.getTypeFactory()
+                    .constructCollectionType(List.class, elementType);
+
+            return objectMapper.readValue(json, type);
+
         } catch (JsonProcessingException e) {
             logger.error("Failed to parse JSON list", e);
             return Collections.emptyList();
