@@ -56,7 +56,34 @@ Server starts at: **http://localhost:8080**
 
 ---
 
-## 📁 Project Structure
+## � Docker: Rebuilding & Switching
+
+### Rebuild the Backend (after code changes)
+```bash
+# Rebuild and restart the backend service
+docker compose up -d --build backend
+```
+
+This command will:
+1. Stop the current `backend` container
+2. Re-run the Maven build inside the Docker container (recompile Java)
+3. Create a new Docker image with the updated JAR
+4. Start the new container
+
+### Just Restart (no rebuild)
+```bash
+docker compose restart backend
+```
+
+### Full Stop and Rebuild
+```bash
+docker compose down
+docker compose up -d --build
+```
+
+---
+
+## �📁 Project Structure
 
 ```
 backend/
