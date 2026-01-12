@@ -11,6 +11,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import org.springframework.lang.NonNull;
 import java.util.Set;
 import java.util.UUID;
 
@@ -35,7 +36,7 @@ public class UserService {
      * @param request the create user request
      * @return the created user response
      */
-    public UserResponse createUser(CreateUserRequest request) {
+    public UserResponse createUser(@NonNull CreateUserRequest request) {
         // Generate username from name or email
         String username = generateUsername(request);
 
@@ -87,9 +88,9 @@ public class UserService {
      * @return page of user responses
      */
     @Transactional(readOnly = true)
-    public Page<UserResponse> getAllUsers(Pageable pageable) {
+    public Page<UserResponse> getAllUsers(@NonNull Pageable pageable) {
         return userRepository.findAll(pageable)
-                .map(user -> new UserResponse(
+                .map((@NonNull User user) -> new UserResponse(
                         user.getId(),
                         user.getEmail(),
                         user.getFirstName(),
@@ -122,7 +123,7 @@ public class UserService {
      * @param password the new password, or null to generate by system
      * @return the generated password if generateBySystem is true, otherwise null
      */
-    public String resetPassword(Long userId, String password) {
+    public String resetPassword(@NonNull Long userId, String password) {
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new RuntimeException("User not found"));
 
@@ -148,9 +149,10 @@ public class UserService {
      * @param request update request
      * @return updated user response
      */
-    public UserResponse updateUser(Long id, UpdateUserRequest request) {
-        User user = userRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("User not found"));
+    public UserResponse updateUser(@NonNull Long id, UpdateUserRequest request) {
+        User user = java.util.Objects.requireNonNull(
+                userRepository.findById(id)
+                        .orElseThrow(() -> new RuntimeException("User not found")));
 
         if (request.getName() != null)
             user.setFirstName(request.getName()); // Basic mapping
@@ -209,7 +211,7 @@ public class UserService {
      *
      * @param id user ID
      */
-    public void deleteUser(Long id) {
+    public void deleteUser(@NonNull Long id) {
         if (!userRepository.existsById(id)) {
             throw new RuntimeException("User not found");
         }

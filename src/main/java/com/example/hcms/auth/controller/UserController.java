@@ -18,6 +18,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import org.springframework.lang.NonNull;
 import java.util.Map;
 
 /**
@@ -47,7 +48,7 @@ public class UserController {
                         @ApiResponse(responseCode = "400", description = "Invalid input"),
                         @ApiResponse(responseCode = "409", description = "User already exists")
         })
-        public ResponseEntity<UserResponse> createUser(@Valid @RequestBody CreateUserRequest request) {
+        public ResponseEntity<UserResponse> createUser(@Valid @RequestBody @NonNull CreateUserRequest request) {
                 UserResponse response = userService.createUser(request);
                 return ResponseEntity.status(HttpStatus.CREATED).body(response);
         }
@@ -63,7 +64,7 @@ public class UserController {
         @ApiResponses(value = {
                         @ApiResponse(responseCode = "200", description = "Users retrieved successfully")
         })
-        public ResponseEntity<Page<UserResponse>> getAllUsers(Pageable pageable) {
+        public ResponseEntity<Page<UserResponse>> getAllUsers(@NonNull Pageable pageable) {
                 Page<UserResponse> users = userService.getAllUsers(pageable);
                 return ResponseEntity.ok(users);
         }
@@ -82,7 +83,7 @@ public class UserController {
                         @ApiResponse(responseCode = "404", description = "User not found")
         })
         public ResponseEntity<Map<String, String>> resetPassword(
-                        @PathVariable Long id,
+                        @PathVariable @NonNull Long id,
                         @RequestBody ResetPasswordRequest request) {
                 String newPassword = userService.resetPassword(id,
                                 request.isGenerateBySystem() ? null : request.getPassword());
@@ -106,8 +107,8 @@ public class UserController {
                         @ApiResponse(responseCode = "404", description = "User not found")
         })
         public ResponseEntity<UserResponse> updateUser(
-                        @PathVariable Long id,
-                        @Valid @RequestBody UpdateUserRequest request) {
+                        @PathVariable @NonNull Long id,
+                        @Valid @RequestBody @NonNull UpdateUserRequest request) {
                 UserResponse response = userService.updateUser(id, request);
                 return ResponseEntity.ok(response);
         }
@@ -124,7 +125,7 @@ public class UserController {
                         @ApiResponse(responseCode = "204", description = "User deleted successfully"),
                         @ApiResponse(responseCode = "404", description = "User not found")
         })
-        public ResponseEntity<Void> deleteUser(@PathVariable Long id) {
+        public ResponseEntity<Void> deleteUser(@PathVariable @NonNull Long id) {
                 userService.deleteUser(id);
                 return ResponseEntity.noContent().build();
         }

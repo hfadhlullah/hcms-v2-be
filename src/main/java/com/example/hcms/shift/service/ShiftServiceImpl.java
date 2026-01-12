@@ -14,6 +14,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import org.springframework.lang.NonNull;
 import java.time.LocalTime;
 
 /**
@@ -31,14 +32,14 @@ public class ShiftServiceImpl implements ShiftService {
 
     @Override
     @Transactional(readOnly = true)
-    public Shift getShiftById(Long id) {
+    public Shift getShiftById(@NonNull Long id) {
         return shiftRepository.findById(id)
                 .orElseThrow(() -> new ShiftNotFoundException(id));
     }
 
     @Override
     @Transactional(readOnly = true)
-    public Page<ShiftResponse> getAllShifts(String search, ShiftStatus status, Pageable pageable) {
+    public Page<ShiftResponse> getAllShifts(String search, ShiftStatus status, @NonNull Pageable pageable) {
         Page<Shift> shifts;
 
         if (search != null && !search.trim().isEmpty()) {
@@ -56,7 +57,7 @@ public class ShiftServiceImpl implements ShiftService {
     }
 
     @Override
-    public ShiftResponse createShift(CreateShiftRequest request, Long userId) {
+    public ShiftResponse createShift(@NonNull CreateShiftRequest request, @NonNull Long userId) {
         Shift shift = new Shift();
 
         // Basic info
@@ -109,7 +110,7 @@ public class ShiftServiceImpl implements ShiftService {
     }
 
     @Override
-    public ShiftResponse updateShift(Long id, UpdateShiftRequest request, Long userId) {
+    public ShiftResponse updateShift(@NonNull Long id, @NonNull UpdateShiftRequest request, @NonNull Long userId) {
         Shift shift = getShiftById(id);
 
         // Basic info
@@ -195,7 +196,7 @@ public class ShiftServiceImpl implements ShiftService {
     }
 
     @Override
-    public void deleteShift(Long id, Long userId) {
+    public void deleteShift(@NonNull Long id, @NonNull Long userId) {
         Shift shift = getShiftById(id);
         shift.setStatus(ShiftStatus.INACTIVE);
         shift.setUpdatedBy(userId);

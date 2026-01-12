@@ -16,7 +16,9 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
+import org.springframework.lang.NonNull;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.server.ResponseStatusException;
 
 /**
  * REST controller for shift management
@@ -40,7 +42,7 @@ public class ShiftController {
     public ResponseEntity<Page<ShiftResponse>> getAllShifts(
             @RequestParam(required = false) String search,
             @RequestParam(required = false) ShiftStatus status,
-            @PageableDefault(size = 20, sort = "name", direction = Sort.Direction.ASC) Pageable pageable) {
+            @PageableDefault(size = 20, sort = "name", direction = Sort.Direction.ASC) @NonNull Pageable pageable) {
 
         Page<ShiftResponse> shifts = shiftService.getAllShifts(search, status, pageable);
         return ResponseEntity.ok(shifts);
@@ -51,7 +53,7 @@ public class ShiftController {
      */
     @GetMapping("/{id}")
     @PreAuthorize("hasAnyRole('HR_ADMIN', 'ADMIN', 'EMPLOYEE')")
-    public ResponseEntity<ShiftResponse> getShiftById(@PathVariable Long id) {
+    public ResponseEntity<ShiftResponse> getShiftById(@PathVariable @NonNull Long id) {
         ShiftResponse shift = shiftService.toResponse(shiftService.getShiftById(id));
         return ResponseEntity.ok(shift);
     }
@@ -62,10 +64,14 @@ public class ShiftController {
     @PostMapping
     @PreAuthorize("hasAnyRole('HR_ADMIN', 'ADMIN')")
     public ResponseEntity<ShiftResponse> createShift(
-            @Valid @RequestBody CreateShiftRequest request,
+            @Valid @RequestBody @NonNull CreateShiftRequest request,
             Authentication authentication) {
 
         Long userId = extractUserId(authentication);
+        if (userId == null) {
+            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "User not authenticated");
+        }
+
         ShiftResponse shift = shiftService.createShift(request, userId);
         return ResponseEntity.status(HttpStatus.CREATED).body(shift);
     }
@@ -76,11 +82,15 @@ public class ShiftController {
     @PutMapping("/{id}")
     @PreAuthorize("hasAnyRole('HR_ADMIN', 'ADMIN')")
     public ResponseEntity<ShiftResponse> updateShift(
-            @PathVariable Long id,
-            @Valid @RequestBody UpdateShiftRequest request,
+            @PathVariable @NonNull Long id,
+            @Valid @RequestBody @NonNull UpdateShiftRequest request,
             Authentication authentication) {
 
         Long userId = extractUserId(authentication);
+        if (userId == null) {
+            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "User not authenticated");
+        }
+
         ShiftResponse shift = shiftService.updateShift(id, request, userId);
         return ResponseEntity.ok(shift);
     }
@@ -91,7 +101,7 @@ public class ShiftController {
     @DeleteMapping("/{id}")
     @PreAuthorize("hasAnyRole('HR_ADMIN', 'ADMIN')")
     public ResponseEntity<java.util.Map<String, String>> deleteShift(
-            @PathVariable Long id,
+            @PathVariable @NonNull Long id,
             Authentication authentication) {
 
         logger.info("DELETE request for shift id: {}", id);

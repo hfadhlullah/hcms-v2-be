@@ -7,6 +7,7 @@ import com.example.hcms.shift.dto.ShiftResponse;
 import com.example.hcms.shift.dto.UpdateShiftRequest;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.lang.NonNull;
 
 /**
  * Service interface for shift management
@@ -15,27 +16,27 @@ public interface ShiftService {
     /**
      * Get a shift by ID
      */
-    Shift getShiftById(Long id);
+    Shift getShiftById(@NonNull Long id);
 
     /**
      * Get all shifts with optional filtering
      */
-    Page<ShiftResponse> getAllShifts(String search, ShiftStatus status, Pageable pageable);
+    Page<ShiftResponse> getAllShifts(String search, ShiftStatus status, @NonNull Pageable pageable);
 
     /**
      * Create a new shift
      */
-    ShiftResponse createShift(CreateShiftRequest request, Long userId);
+    ShiftResponse createShift(@NonNull CreateShiftRequest request, @NonNull Long userId);
 
     /**
      * Update an existing shift
      */
-    ShiftResponse updateShift(Long id, UpdateShiftRequest request, Long userId);
+    ShiftResponse updateShift(@NonNull Long id, @NonNull UpdateShiftRequest request, @NonNull Long userId);
 
     /**
      * Delete (soft delete) a shift
      */
-    void deleteShift(Long id, Long userId);
+    void deleteShift(@NonNull Long id, @NonNull Long userId);
 
     /**
      * Convert shift entity to response DTO

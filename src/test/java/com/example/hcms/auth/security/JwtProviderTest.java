@@ -21,6 +21,7 @@ public class JwtProviderTest {
     private static final String TEST_SECRET = "TestSecretKeyForJWTTokenGenerationAndValidation1234567890";
 
     @BeforeEach
+    @SuppressWarnings("null")
     public void setUp() {
         jwtProvider = new JwtProvider();
         // Set test secret via reflection
@@ -40,7 +41,7 @@ public class JwtProviderTest {
         // Assert
         assertNotNull(token);
         assertFalse(token.isEmpty());
-        assertTrue(token.contains("."));  // JWT has 3 parts separated by dots
+        assertTrue(token.contains(".")); // JWT has 3 parts separated by dots
     }
 
     @Test

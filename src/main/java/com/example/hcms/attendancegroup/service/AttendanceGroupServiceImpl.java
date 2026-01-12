@@ -3,6 +3,7 @@ package com.example.hcms.attendancegroup.service;
 import com.example.hcms.attendancegroup.domain.*;
 import com.example.hcms.attendancegroup.dto.*;
 import com.example.hcms.attendancegroup.repository.AttendanceGroupRepository;
+import com.example.hcms.auth.repository.UserRepository;
 import com.example.hcms.shift.domain.Shift;
 import com.example.hcms.shift.repository.ShiftRepository;
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -29,14 +30,17 @@ public class AttendanceGroupServiceImpl implements AttendanceGroupService {
 
     private final AttendanceGroupRepository repository;
     private final ShiftRepository shiftRepository;
+    private final UserRepository userRepository;
     private final ObjectMapper objectMapper;
 
     public AttendanceGroupServiceImpl(
             AttendanceGroupRepository repository,
             ShiftRepository shiftRepository,
+            UserRepository userRepository,
             ObjectMapper objectMapper) {
         this.repository = repository;
         this.shiftRepository = shiftRepository;
+        this.userRepository = userRepository;
         this.objectMapper = objectMapper;
     }
 
@@ -192,7 +196,7 @@ public class AttendanceGroupServiceImpl implements AttendanceGroupService {
         response.setStatus(group.getStatus());
         response.setCreatedAt(group.getCreatedAt());
         response.setUpdatedAt(group.getUpdatedAt());
-        response.setMemberCount(0); // TODO: Calculate when members feature is implemented
+        response.setMemberCount((int) userRepository.countByAttendanceGroupId(group.getId()));
 
         return response;
     }

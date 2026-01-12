@@ -13,6 +13,7 @@ import java.util.Optional;
 public interface UserRepository extends JpaRepository<User, Long> {
     /**
      * Find user by email
+     *
      * @param email the user's email
      * @return Optional containing user if found
      */
@@ -20,6 +21,7 @@ public interface UserRepository extends JpaRepository<User, Long> {
 
     /**
      * Find user by username
+     *
      * @param username the user's username
      * @return Optional containing user if found
      */
@@ -27,8 +29,17 @@ public interface UserRepository extends JpaRepository<User, Long> {
 
     /**
      * Check if user exists by email
+     *
      * @param email the email to check
      * @return true if user exists
      */
     boolean existsByEmail(String email);
+
+    /**
+     * Count users in an attendance group
+     *
+     * @param attendanceGroupId the attendance group ID
+     * @return number of users
+     */
+    long countByAttendanceGroupId(Long attendanceGroupId);
 }

@@ -80,6 +80,9 @@ public class User {
     @Column(length = 100)
     private String dottedLineManager;
 
+    @Column(name = "attendance_group_id")
+    private Long attendanceGroupId;
+
     @Column(nullable = false)
     @Enumerated(EnumType.STRING)
     private UserStatus status = UserStatus.ACTIVE;
@@ -284,6 +287,14 @@ public class User {
 
     public void setDottedLineManager(String dottedLineManager) {
         this.dottedLineManager = dottedLineManager;
+    }
+
+    public Long getAttendanceGroupId() {
+        return attendanceGroupId;
+    }
+
+    public void setAttendanceGroupId(Long attendanceGroupId) {
+        this.attendanceGroupId = attendanceGroupId;
     }
 
     public UserStatus getStatus() {
