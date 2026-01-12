@@ -13,34 +13,44 @@ REST API backend for the HCMS Time & Attendance System.
 | MariaDB/MySQL | 10.x+ / 8.x |
 
 ### 1. Database Setup
+   
+#### Option A: Docker (Recommended)
+This requires `docker-compose.yml` which is present in the root directory.
 
+```bash
+docker compose up -d
+```
+This runs the database on port 3306.
+
+#### Option B: Manual Setup
 ```bash
 mysql -u root -p
 CREATE DATABASE hcms;
 ```
 
-### 2. Configure Database
+### 2. Run the Application
 
-Update `src/main/resources/application.yml`:
-
-```yaml
-spring:
-  datasource:
-    url: jdbc:mariadb://localhost:3306/hcms
-    username: root
-    password: your_password
-```
-
-### 3. Run the Application
-
+#### Option A: Docker (Recommended)
 ```bash
-# Development
-mvn spring-boot:run
-
-# Or build and run JAR
-mvn clean package -DskipTests
-java -jar target/difan-hcms-0.1.0-SNAPSHOT.jar
+docker compose up -d
 ```
+Server starts at: **http://localhost:8080**
+
+#### Option B: Manual Setup
+
+1. **Configure Database**:
+   Update `src/main/resources/application.yml` with your database credentials.
+
+2. **Run Application**:
+   ```bash
+   # Development
+   mvn spring-boot:run
+   
+   # Or build and run JAR
+   mvn clean package -DskipTests
+   java -jar target/difan-hcms-0.1.0-SNAPSHOT.jar
+   ```
+   Server starts at: **http://localhost:8080**
 
 Server starts at: **http://localhost:8080**
 
@@ -60,16 +70,25 @@ backend/
 │   │   ├── security/                # JWT, filters, rate limiting
 │   │   └── exception/               # Custom exceptions
 │   │
-│   ├── attendance/                  # Attendance Module
-│   │   ├── domain/                  # AttendanceGroup, Shift entities
+│   ├── shift/                       # Shifts Module
+│   │   ├── domain/                  # Shift entities
 │   │   ├── dto/                     # Create/Update DTOs
 │   │   ├── repository/              # JPA repositories
-│   │   ├── service/                 # AttendanceGroupService, ShiftService
+│   │   ├── service/                 # ShiftService
 │   │   └── controller/              # REST controllers
 │   │
-│   └── common/                      # Shared Components
-│       ├── config/                  # Security, OpenAPI, CORS config
-│       └── error/                   # Global exception handler
+│   ├── attendancegroup/             # Attendance Groups Module
+│   │   ├── domain/                  # AttendanceGroup entities
+│   │   ├── dto/                     # Create/Update DTOs
+│   │   ├── repository/              # JPA repositories
+│   │   ├── service/                 # AttendanceGroupService
+│   │   └── controller/              # REST controllers
+│   │
+│   ├── common/                      # Shared Components
+│   │   ├── config/                  # Security, OpenAPI, CORS config
+│   │   └── error/                   # Global exception handler
+│   │
+│   └── util/                        # Utility Classes
 │
 ├── src/main/resources/
 │   ├── db/migration/                # Flyway SQL migrations
