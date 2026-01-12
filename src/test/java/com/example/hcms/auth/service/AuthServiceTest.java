@@ -16,6 +16,8 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
+import java.time.Instant;
+import java.time.temporal.ChronoUnit;
 import java.util.HashSet;
 import java.util.Optional;
 import java.util.Set;
@@ -76,10 +78,12 @@ public class AuthServiceTest {
         String ipAddress = "192.168.1.100";
         String userAgent = "Mozilla/5.0";
         String mockToken = "mock.jwt.token";
+        Instant mockExpiresAt = Instant.now().plus(8, ChronoUnit.HOURS);
 
         when(userRepository.findByEmail("alice@company.com")).thenReturn(Optional.of(testUser));
         when(passwordEncoder.matches("password123", testUser.getPasswordHash())).thenReturn(true);
-        when(jwtProvider.generateToken(1L, Set.of("EMPLOYEE"))).thenReturn(mockToken);
+        when(jwtProvider.generateToken(1L, Set.of("EMPLOYEE"), false)).thenReturn(mockToken);
+        when(jwtProvider.getTokenExpirationTime(false)).thenReturn(mockExpiresAt);
 
         // Act
         LoginResponse response = authService.login(loginRequest, ipAddress, userAgent);
@@ -160,12 +164,14 @@ public class AuthServiceTest {
         String ipAddress = "192.168.1.100";
         String userAgent = "Mozilla/5.0";
         String mockToken = "mock.jwt.token";
+        Instant mockExpiresAt = Instant.now().plus(8, ChronoUnit.HOURS);
 
         LoginRequest mixedCaseRequest = new LoginRequest("ALICE@COMPANY.COM", "password123");
 
         when(userRepository.findByEmail("alice@company.com")).thenReturn(Optional.of(testUser));
         when(passwordEncoder.matches("password123", testUser.getPasswordHash())).thenReturn(true);
-        when(jwtProvider.generateToken(1L, Set.of("EMPLOYEE"))).thenReturn(mockToken);
+        when(jwtProvider.generateToken(1L, Set.of("EMPLOYEE"), false)).thenReturn(mockToken);
+        when(jwtProvider.getTokenExpirationTime(false)).thenReturn(mockExpiresAt);
 
         // Act
         LoginResponse response = authService.login(mixedCaseRequest, ipAddress, userAgent);

@@ -94,6 +94,25 @@ backend/
 │   ├── db/migration/                # Flyway SQL migrations
 │   └── application.yml              # Configuration
 │
+├── src/test/java/com/example/hcms/  # Tests (Mirror main structure)
+│   ├── auth/                        # Authentication Tests
+│   │   ├── service/                 # AuthServiceTest.java
+│   │   ├── security/                # JwtProviderTest.java
+│   │   └── controller/              # (to be added)
+│   │
+│   ├── shift/                       # Shift Module Tests
+│   │   ├── controller/              # (ShiftControllerTest.java)
+│   │   ├── service/                 # (ShiftServiceTest.java)
+│   │   └── repository/              # (ShiftRepositoryTest.java)
+│   │
+│   ├── attendanceGroup/             # Attendance Group Tests
+│   │   ├── controller/              # (AttendanceGroupControllerTest.java)
+│   │   ├── service/                 # (AttendanceGroupServiceTest.java)
+│   │   └── repository/              # (AttendanceGroupRepositoryTest.java)
+│   │
+│   └── common/                      # Shared Tests
+│       └── config/                  # (ConfigTest.java)
+│
 └── pom.xml                          # Maven dependencies
 ```
 
@@ -193,8 +212,35 @@ app:
 
 ## 🧪 Testing
 
+### Test Structure
+
+Tests mirror the main code structure by feature:
+
+```
+src/test/java/com/example/hcms/
+│
+├── auth/                           # Authentication Tests
+│   ├── service/                    # AuthServiceTest.java
+│   └── security/                   # JwtProviderTest.java
+│
+├── shift/                          # Shift Module Tests
+│   ├── controller/                 # (ShiftControllerTest.java)
+│   ├── service/                    # (ShiftServiceTest.java)
+│   └── repository/                 # (ShiftRepositoryTest.java)
+│
+├── attendanceGroup/                # Attendance Group Tests
+│   ├── controller/                 # (AttendanceGroupControllerTest.java)
+│   ├── service/                    # (AttendanceGroupServiceTest.java)
+│   └── repository/                 # (AttendanceGroupRepositoryTest.java)
+│
+└── common/                         # Shared Tests
+    └── config/                     # (ConfigTest.java)
+```
+
+### Running Tests
+
 ```bash
-# Run unit tests
+# Run all unit tests
 mvn test
 
 # Run integration tests (requires Docker)
@@ -202,6 +248,29 @@ mvn verify
 
 # Run specific test class
 mvn test -Dtest=AuthServiceTest
+
+# Run specific test method
+mvn test -Dtest=AuthServiceTest#testLoginSuccess
+
+# Run tests for a specific module
+mvn test -Dtest=shift/**
+```
+
+### Test Organization Best Practices
+
+Each feature module should have tests organized as:
+- **Service Tests**: Business logic, mocking repositories
+- **Controller Tests**: REST endpoints, request/response validation
+- **Repository Tests**: Database queries, using Testcontainers
+- **Security Tests**: JWT, authentication, authorization
+
+Example:
+```
+auth/
+  ├── service/AuthServiceTest.java
+  ├── controller/AuthControllerTest.java     (to be added)
+  ├── security/JwtProviderTest.java
+  └── repository/UserRepositoryTest.java     (to be added)
 ```
 
 ---
