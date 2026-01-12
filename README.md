@@ -77,7 +77,7 @@ backend/
 │   │   ├── service/                 # ShiftService
 │   │   └── controller/              # REST controllers
 │   │
-│   ├── attendancegroup/             # Attendance Groups Module
+│   ├── attendanceGroup/             # Attendance Groups Module
 │   │   ├── domain/                  # AttendanceGroup entities
 │   │   ├── dto/                     # Create/Update DTOs
 │   │   ├── repository/              # JPA repositories

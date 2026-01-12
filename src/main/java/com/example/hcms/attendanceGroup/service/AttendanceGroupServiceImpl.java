@@ -1,8 +1,8 @@
-package com.example.hcms.attendancegroup.service;
+package com.example.hcms.attendanceGroup.service;
 
-import com.example.hcms.attendancegroup.domain.*;
-import com.example.hcms.attendancegroup.dto.*;
-import com.example.hcms.attendancegroup.repository.AttendanceGroupRepository;
+import com.example.hcms.attendanceGroup.domain.*;
+import com.example.hcms.attendanceGroup.dto.*;
+import com.example.hcms.attendanceGroup.repository.AttendanceGroupRepository;
 import com.example.hcms.auth.repository.UserRepository;
 import com.example.hcms.shift.domain.Shift;
 import com.example.hcms.shift.repository.ShiftRepository;

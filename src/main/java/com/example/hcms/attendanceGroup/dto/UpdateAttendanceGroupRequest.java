@@ -1,4 +1,4 @@
-package com.example.hcms.attendancegroup.dto;
+package com.example.hcms.attendanceGroup.dto;
 
 /**
  * Request DTO for updating an AttendanceGroup

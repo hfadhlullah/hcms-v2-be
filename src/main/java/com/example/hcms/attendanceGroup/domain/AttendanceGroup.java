@@ -1,60 +1,152 @@
-package com.example.hcms.attendancegroup.dto;
+package com.example.hcms.attendanceGroup.domain;
 
-import com.example.hcms.attendancegroup.domain.*;
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.Size;
-import java.util.List;
+import com.example.hcms.shift.domain.Shift;
+import jakarta.persistence.*;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
 
 /**
- * Request DTO for creating an AttendanceGroup
+ * Attendance Group entity - groups employees with shared attendance settings
  */
-public class CreateAttendanceGroupRequest {
+@Entity
+@Table(name = "attendanceGroups")
+public class AttendanceGroup {
 
-    @NotBlank(message = "Group name is required")
-    @Size(max = 64, message = "Group name must be at most 64 characters")
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+
+    @Column(nullable = false, length = 64)
     private String name;
 
+    @Column(name = "owner_id")
     private Long ownerId;
-    private List<Long> subOwnerIds;
-    private String timezone;
-    private Boolean relocationSync;
 
-    // Member tracking
-    private MemberTrackingMode memberTrackingRequired;
-    private String memberTrackingRequiredConditions;
-    private MemberTrackingMode memberTrackingOptional;
-    private String memberTrackingOptionalConditions;
+    @Column(name = "sub_owner_ids", columnDefinition = "TEXT")
+    private String subOwnerIds; // JSON array of user IDs
+
+    @Column(length = 50)
+    private String timezone = "GMT+07:00";
+
+    @Column(name = "relocation_sync")
+    private Boolean relocationSync = false;
+
+    @Enumerated(EnumType.STRING)
+    @Column(name = "member_tracking_required", columnDefinition = "VARCHAR(20)")
+    private MemberTrackingMode memberTrackingRequired = MemberTrackingMode.NONE;
+
+    @Column(name = "member_tracking_required_conditions", columnDefinition = "TEXT")
+    private String memberTrackingRequiredConditions; // JSON for custom conditions
+
+    @Enumerated(EnumType.STRING)
+    @Column(name = "member_tracking_optional", columnDefinition = "VARCHAR(20)")
+    private MemberTrackingMode memberTrackingOptional = MemberTrackingMode.NONE;
+
+    @Column(name = "member_tracking_optional_conditions", columnDefinition = "TEXT")
+    private String memberTrackingOptionalConditions; // JSON for custom conditions
 
     // Shift settings
-    private GroupShiftType shiftType;
-    private Long defaultShiftId;
+    @Enumerated(EnumType.STRING)
+    @Column(name = "shift_type", columnDefinition = "VARCHAR(20)")
+    private GroupShiftType shiftType = GroupShiftType.FIXED;
 
-    // Weekly schedule
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "default_shift_id")
+    private Shift defaultShift;
+
+    // Weekly schedule - references to Shift IDs for each day
+    @Column(name = "monday_shift_id")
     private Long mondayShiftId;
+
+    @Column(name = "tuesday_shift_id")
     private Long tuesdayShiftId;
+
+    @Column(name = "wednesday_shift_id")
     private Long wednesdayShiftId;
+
+    @Column(name = "thursday_shift_id")
     private Long thursdayShiftId;
+
+    @Column(name = "friday_shift_id")
     private Long fridayShiftId;
+
+    @Column(name = "saturday_shift_id")
     private Long saturdayShiftId;
+
+    @Column(name = "sunday_shift_id")
     private Long sundayShiftId;
 
     // Schedule settings
-    private Boolean usePublicHolidays;
-    private List<String> specialDays;
+    @Column(name = "use_public_holidays")
+    private Boolean usePublicHolidays = false;
+
+    @Column(name = "special_days", columnDefinition = "TEXT")
+    private String specialDays; // JSON array of special dates
 
     // Attendance settings
-    private Boolean requirePhoto;
-    private Boolean allowOffsite;
-    private AttendancePolicy outOfOfficePolicy;
-    private AttendancePolicy businessTripPolicy;
-    private LeaveAttendancePolicy partialLeavePolicy;
-    private Boolean recordOvertime;
-    private Boolean nonWorkingDayApproval;
-    private String nonWorkingDayResetTime; // HH:mm format
-    private Boolean allowCorrections;
-    private List<String> correctionTypes;
+    @Column(name = "require_photo")
+    private Boolean requirePhoto = false;
+
+    @Column(name = "allow_offsite")
+    private Boolean allowOffsite = false;
+
+    @Enumerated(EnumType.STRING)
+    @Column(name = "out_of_office_policy", columnDefinition = "VARCHAR(30)")
+    private AttendancePolicy outOfOfficePolicy = AttendancePolicy.NO_CLOCK;
+
+    @Enumerated(EnumType.STRING)
+    @Column(name = "business_trip_policy", columnDefinition = "VARCHAR(30)")
+    private AttendancePolicy businessTripPolicy = AttendancePolicy.NO_CLOCK;
+
+    @Enumerated(EnumType.STRING)
+    @Column(name = "partial_leave_policy", columnDefinition = "VARCHAR(30)")
+    private LeaveAttendancePolicy partialLeavePolicy = LeaveAttendancePolicy.NO_CLOCK;
+
+    @Column(name = "record_overtime")
+    private Boolean recordOvertime = false;
+
+    @Column(name = "non_working_day_approval")
+    private Boolean nonWorkingDayApproval = false;
+
+    @Column(name = "non_working_day_reset_time")
+    private LocalTime nonWorkingDayResetTime = LocalTime.of(4, 0);
+
+    @Column(name = "allow_corrections")
+    private Boolean allowCorrections = true;
+
+    @Column(name = "correction_types", columnDefinition = "TEXT")
+    private String correctionTypes; // JSON array: ["NO_RECORD", "LATE_IN", "EARLY_OUT", "REGULAR"]
+
+    @Enumerated(EnumType.STRING)
+    @Column(columnDefinition = "VARCHAR(20)")
+    private AttendanceGroupStatus status = AttendanceGroupStatus.ACTIVE;
+
+    @Column(name = "created_at")
+    private LocalDateTime createdAt;
+
+    @Column(name = "updated_at")
+    private LocalDateTime updatedAt;
+
+    @PrePersist
+    protected void onCreate() {
+        createdAt = LocalDateTime.now();
+        updatedAt = LocalDateTime.now();
+    }
+
+    @PreUpdate
+    protected void onUpdate() {
+        updatedAt = LocalDateTime.now();
+    }
 
     // Getters and Setters
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
     public String getName() {
         return name;
     }
@@ -71,11 +163,11 @@ public class CreateAttendanceGroupRequest {
         this.ownerId = ownerId;
     }
 
-    public List<Long> getSubOwnerIds() {
+    public String getSubOwnerIds() {
         return subOwnerIds;
     }
 
-    public void setSubOwnerIds(List<Long> subOwnerIds) {
+    public void setSubOwnerIds(String subOwnerIds) {
         this.subOwnerIds = subOwnerIds;
     }
 
@@ -135,12 +227,12 @@ public class CreateAttendanceGroupRequest {
         this.shiftType = shiftType;
     }
 
-    public Long getDefaultShiftId() {
-        return defaultShiftId;
+    public Shift getDefaultShift() {
+        return defaultShift;
     }
 
-    public void setDefaultShiftId(Long defaultShiftId) {
-        this.defaultShiftId = defaultShiftId;
+    public void setDefaultShift(Shift defaultShift) {
+        this.defaultShift = defaultShift;
     }
 
     public Long getMondayShiftId() {
@@ -207,11 +299,11 @@ public class CreateAttendanceGroupRequest {
         this.usePublicHolidays = usePublicHolidays;
     }
 
-    public List<String> getSpecialDays() {
+    public String getSpecialDays() {
         return specialDays;
     }
 
-    public void setSpecialDays(List<String> specialDays) {
+    public void setSpecialDays(String specialDays) {
         this.specialDays = specialDays;
     }
 
@@ -271,11 +363,11 @@ public class CreateAttendanceGroupRequest {
         this.nonWorkingDayApproval = nonWorkingDayApproval;
     }
 
-    public String getNonWorkingDayResetTime() {
+    public LocalTime getNonWorkingDayResetTime() {
         return nonWorkingDayResetTime;
     }
 
-    public void setNonWorkingDayResetTime(String nonWorkingDayResetTime) {
+    public void setNonWorkingDayResetTime(LocalTime nonWorkingDayResetTime) {
         this.nonWorkingDayResetTime = nonWorkingDayResetTime;
     }
 
@@ -287,11 +379,35 @@ public class CreateAttendanceGroupRequest {
         this.allowCorrections = allowCorrections;
     }
 
-    public List<String> getCorrectionTypes() {
+    public String getCorrectionTypes() {
         return correctionTypes;
     }
 
-    public void setCorrectionTypes(List<String> correctionTypes) {
+    public void setCorrectionTypes(String correctionTypes) {
         this.correctionTypes = correctionTypes;
+    }
+
+    public AttendanceGroupStatus getStatus() {
+        return status;
+    }
+
+    public void setStatus(AttendanceGroupStatus status) {
+        this.status = status;
+    }
+
+    public LocalDateTime getCreatedAt() {
+        return createdAt;
+    }
+
+    public void setCreatedAt(LocalDateTime createdAt) {
+        this.createdAt = createdAt;
+    }
+
+    public LocalDateTime getUpdatedAt() {
+        return updatedAt;
+    }
+
+    public void setUpdatedAt(LocalDateTime updatedAt) {
+        this.updatedAt = updatedAt;
     }
 }

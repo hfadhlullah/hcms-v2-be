@@ -1,7 +1,7 @@
-package com.example.hcms.attendancegroup.repository;
+package com.example.hcms.attendanceGroup.repository;
 
-import com.example.hcms.attendancegroup.domain.AttendanceGroup;
-import com.example.hcms.attendancegroup.domain.AttendanceGroupStatus;
+import com.example.hcms.attendanceGroup.domain.AttendanceGroup;
+import com.example.hcms.attendanceGroup.domain.AttendanceGroupStatus;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;

@@ -6,3 +6,5 @@ mvnw.cmd
 .idea/
 *.iml
 .DS_Store
+.vscode/
+docs/

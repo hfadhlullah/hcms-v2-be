@@ -1,4 +1,4 @@
-package com.example.hcms.attendancegroup.domain;
+package com.example.hcms.attendanceGroup.domain;
 
 /**
  * Type of shift scheduling for the attendance group

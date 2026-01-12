@@ -1,10 +1,10 @@
-package com.example.hcms.attendancegroup.service;
+package com.example.hcms.attendanceGroup.service;
 
-import com.example.hcms.attendancegroup.domain.AttendanceGroup;
-import com.example.hcms.attendancegroup.domain.AttendanceGroupStatus;
-import com.example.hcms.attendancegroup.dto.AttendanceGroupResponse;
-import com.example.hcms.attendancegroup.dto.CreateAttendanceGroupRequest;
-import com.example.hcms.attendancegroup.dto.UpdateAttendanceGroupRequest;
+import com.example.hcms.attendanceGroup.domain.AttendanceGroup;
+import com.example.hcms.attendanceGroup.domain.AttendanceGroupStatus;
+import com.example.hcms.attendanceGroup.dto.AttendanceGroupResponse;
+import com.example.hcms.attendanceGroup.dto.CreateAttendanceGroupRequest;
+import com.example.hcms.attendanceGroup.dto.UpdateAttendanceGroupRequest;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 

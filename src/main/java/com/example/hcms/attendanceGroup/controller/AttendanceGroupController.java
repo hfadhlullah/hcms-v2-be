@@ -1,10 +1,10 @@
-package com.example.hcms.attendancegroup.controller;
+package com.example.hcms.attendanceGroup.controller;
 
-import com.example.hcms.attendancegroup.domain.AttendanceGroupStatus;
-import com.example.hcms.attendancegroup.dto.AttendanceGroupResponse;
-import com.example.hcms.attendancegroup.dto.CreateAttendanceGroupRequest;
-import com.example.hcms.attendancegroup.dto.UpdateAttendanceGroupRequest;
-import com.example.hcms.attendancegroup.service.AttendanceGroupService;
+import com.example.hcms.attendanceGroup.domain.AttendanceGroupStatus;
+import com.example.hcms.attendanceGroup.dto.AttendanceGroupResponse;
+import com.example.hcms.attendanceGroup.dto.CreateAttendanceGroupRequest;
+import com.example.hcms.attendanceGroup.dto.UpdateAttendanceGroupRequest;
+import com.example.hcms.attendanceGroup.service.AttendanceGroupService;
 import jakarta.validation.Valid;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

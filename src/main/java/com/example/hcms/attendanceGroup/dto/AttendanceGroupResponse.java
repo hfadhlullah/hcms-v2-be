@@ -1,6 +1,6 @@
-package com.example.hcms.attendancegroup.dto;
+package com.example.hcms.attendanceGroup.dto;
 
-import com.example.hcms.attendancegroup.domain.*;
+import com.example.hcms.attendanceGroup.domain.*;
 import java.time.LocalDateTime;
 import java.util.List;
 
